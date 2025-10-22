@@ -46,6 +46,7 @@ export interface ListTasksForUser {
   execute(input: {
     userId: string;
     pagination?: Pagination;
+    status?: TaskStatus;
   }): Promise<{ items: Task[]; nextCursor?: string | null }>;
 }
 

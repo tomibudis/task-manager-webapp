@@ -22,7 +22,8 @@ export interface TaskRepository {
   findById(taskId: string): Promise<Task | null>;
   listByUser(
     userId: string,
-    pagination?: Pagination
+    pagination?: Pagination,
+    status?: TaskStatus
   ): Promise<{ items: Task[]; nextCursor?: string | null }>;
   update(input: UpdateTaskInput): Promise<Task>;
   updateStatus(

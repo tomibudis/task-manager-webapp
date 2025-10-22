@@ -1,16 +1,16 @@
-import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import prisma from '@/data/prisma/client';
 import { BcryptPasswordHasher } from '@/services/password';
+import { getServerSession } from 'next-auth/next';
 
 const password = new BcryptPasswordHasher();
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'jwt' },
+  session: { strategy: 'jwt' as const },
   providers: [
-    Credentials({
+    CredentialsProvider({
       id: 'credentials',
       name: 'Credentials',
       credentials: {
@@ -32,4 +32,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/signin',
   },
-});
+  callbacks: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: any) {
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
+  },
+};
+
+export async function auth() {
+  return getServerSession(authOptions);
+}

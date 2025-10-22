@@ -28,12 +28,16 @@ export class PrismaTaskRepository implements TaskRepository {
 
   async listByUser(
     userId: string,
-    pagination?: Pagination
+    pagination?: Pagination,
+    status?: TaskStatus
   ): Promise<{ items: Task[]; nextCursor?: string | null }> {
     const limit = Math.min(Math.max(pagination?.limit ?? 20, 1), 100);
     const cursor = pagination?.cursor ? { id: pagination.cursor } : undefined;
     const items = await prisma.task.findMany({
-      where: { userId },
+      where: {
+        userId,
+        ...(status ? { status } : {}),
+      },
       take: limit + 1,
       ...(cursor ? { skip: 1, cursor } : {}),
       orderBy: { createdAt: 'desc' },
@@ -48,7 +52,7 @@ export class PrismaTaskRepository implements TaskRepository {
 
   async update(input: UpdateTaskInput): Promise<Task> {
     const task = await prisma.task.update({
-      where: { id: input.id },
+      where: { id: input.id, userId: input.userId },
       data: {
         title: input.title,
         description: input.description,
@@ -64,13 +68,13 @@ export class PrismaTaskRepository implements TaskRepository {
     status: TaskStatus
   ): Promise<Task> {
     const task = await prisma.task.update({
-      where: { id: taskId },
+      where: { id: taskId, userId },
       data: { status },
     });
     return task as unknown as Task;
   }
 
   async delete(taskId: string, userId: string): Promise<void> {
-    await prisma.task.delete({ where: { id: taskId } });
+    await prisma.task.delete({ where: { id: taskId, userId } });
   }
 }

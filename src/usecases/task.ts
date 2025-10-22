@@ -93,10 +93,11 @@ export class ListTasksForUserService implements ListTasksForUser {
   async execute(input: {
     userId: string;
     pagination?: Pagination;
+    status?: TaskStatus;
   }): Promise<{ items: Task[]; nextCursor?: string | null }> {
     const user = await this.users.findById(input.userId);
     if (!user) throw new NotFoundError('User not found');
-    return this.tasks.listByUser(input.userId, input.pagination);
+    return this.tasks.listByUser(input.userId, input.pagination, input.status);
   }
 }
 

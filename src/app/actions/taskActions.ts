@@ -78,12 +78,15 @@ export async function deleteTaskAction(input: { id: string }): Promise<void> {
   revalidatePath('/tasks');
 }
 
-export async function listMyTasksAction(pagination?: Pagination): Promise<{
+export async function listMyTasksAction(
+  pagination?: Pagination,
+  status?: TaskStatus
+): Promise<{
   items: Task[];
   nextCursor?: string | null;
 }> {
   const session = await auth();
   if (!session?.user?.id) throw new Error('Unauthorized');
   const list = new ListTasksForUserService(tasksRepo, usersRepo);
-  return list.execute({ userId: session.user.id, pagination });
+  return list.execute({ userId: session.user.id, pagination, status });
 }
