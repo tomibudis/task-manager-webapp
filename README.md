@@ -1,36 +1,175 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Manager Web App
 
-## Getting Started
+A clean architecture task management application built with Next.js, featuring authentication, CRUD operations, and task filtering.
 
-First, run the development server:
+## 🎬 Showcase
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Watch the application demo: [Demo Video](https://www.loom.com/share/44360ad9aef1482d9237a855467a4f55?from_recorder=1&focus_title=1)
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    subgraph "Presentation Layer"
+        UI[React Components]
+        Actions[Server Actions]
+        API[API Routes]
+    end
+
+    subgraph "Application Layer"
+        UseCases[Use Cases]
+    end
+
+    subgraph "Domain Layer"
+        Types[Domain Types]
+        Repos[Repository Interfaces]
+        Errors[Domain Errors]
+    end
+
+    subgraph "Infrastructure Layer"
+        PrismaRepo[Prisma Repositories]
+        PasswordService[Password Service]
+    end
+
+    subgraph "Database"
+        PostgreSQL[(PostgreSQL)]
+    end
+
+    UI --> Actions
+    UI --> API
+    Actions --> UseCases
+    API --> UseCases
+    UseCases --> Repos
+    UseCases --> Types
+    UseCases --> Errors
+    PrismaRepo --> PostgreSQL
+    Repos -.-> PrismaRepo
+    UseCases --> PasswordService
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── actions/           # Server actions
+│   ├── api/               # API routes
+│   ├── signin/            # Sign in page
+│   ├── signup/            # Sign up page
+│   └── tasks/             # Task pages
+├── components/             # React components
+│   └── ui/                # Shadcn UI components
+├── domain/                 # Business logic layer
+│   ├── types.ts           # Domain types
+│   ├── repositories.ts    # Repository interfaces
+│   ├── usecases.ts        # Use case interfaces
+│   └── errors.ts          # Domain errors
+├── repositories/           # Data access layer
+│   └── prisma/            # Prisma implementations
+├── usecases/              # Use case implementations
+├── services/              # External services
+└── auth/                  # Auth configuration
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Technical Choices
 
-## Learn More
+### Frontend
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js 16** with App Router - React framework with server components
+- **Shadcn UI** - Accessible component library
+- **Tailwind CSS** - Utility-first styling
+- **React Hook Form** + **Zod** - Form validation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Backend
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Clean Architecture** - Separation of concerns via layers
+- **Prisma** - Type-safe ORM
+- **PostgreSQL** - Relational database
+- **NextAuth** - Authentication
 
-## Deploy on Vercel
+### Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **TypeScript** - Type safety
+- **Vitest** - Testing framework
+- **ESLint** + **Prettier** - Code quality
+- **Husky** + **lint-staged** - Git hooks
+- **Docker** - Containerization
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (or npm/yarn)
+- Docker (optional)
+
+### Local Development
+
+1. **Install dependencies**
+
+   ```bash
+   pnpm install
+   ```
+
+2. **Start PostgreSQL**
+
+   ```bash
+   docker-compose up -d db
+   ```
+
+3. **Set up environment variables**
+
+   ```bash
+   cp .env.example .env
+   # Edit .env with your DATABASE_URL and NEXTAUTH_SECRET
+   ```
+
+4. **Run migrations**
+
+   ```bash
+   pnpm prisma migrate dev
+   ```
+
+5. **Seed database** (optional)
+
+   ```bash
+   pnpm db:seed
+   ```
+
+6. **Start development server**
+
+   ```bash
+   pnpm dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000)
+
+### Docker
+
+```bash
+docker-compose up
+```
+
+Access the app at [http://localhost:3000](http://localhost:3000)
+
+### Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm test` - Run tests
+- `pnpm lint` - Run linter
+- `pnpm db:studio` - Open Prisma Studio
+- `pnpm db:seed` - Seed database
+
+## 🧪 Testing
+
+```bash
+pnpm test              # Run tests
+pnpm test:ui           # Run tests with UI
+pnpm test:coverage     # Generate coverage report
+```
+
+## 📝 License
+
+MIT
