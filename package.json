@@ -7,15 +7,25 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed",
+    "postinstall": "prisma generate",
     "prepare": "husky",
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "bcryptjs": "^2.4.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "next": "16.0.0"
   },
   "devDependencies": {
+    "prisma": "^5.20.0",
+    "tsx": "^4.19.0",
     "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -38,5 +48,9 @@
     "*.{json,css,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "packageManager": "pnpm@10.19.0+sha512.c9fc7236e92adf5c8af42fd5bf1612df99c2ceb62f27047032f4720b33f8eacdde311865e91c411f2774f618d82f320808ecb51718bfa82c060c4ba7c76a32b8"
 }
