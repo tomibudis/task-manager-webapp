@@ -1,9 +1,8 @@
 import prisma from '@/data/prisma/client';
 
 export default async function Home() {
-  const [users, projects, tasks] = await Promise.all([
+  const [users, tasks] = await Promise.all([
     prisma.user.count(),
-    prisma.project.count(),
     prisma.task.count(),
   ]);
 
@@ -16,7 +15,6 @@ export default async function Home() {
       <h1 className="text-2xl font-bold">DB Status</h1>
       <ul className="mt-4 space-y-2">
         <li>Users: {users}</li>
-        <li>Projects: {projects}</li>
         <li>Tasks: {tasks}</li>
         <li>Admin present: {admin ? 'yes' : 'no'}</li>
       </ul>
