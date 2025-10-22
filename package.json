@@ -7,6 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:run": "vitest run",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "db:push": "prisma db push",
@@ -40,15 +44,19 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.0.1",
+    "@vitest/ui": "^4.0.1",
     "eslint": "^9",
     "eslint-config-next": "16.0.0",
+    "happy-dom": "^20.0.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.5",
     "prettier": "^3.6.2",
     "prisma": "^5.20.0",
     "tailwindcss": "^4",
     "tsx": "^4.19.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.1"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
