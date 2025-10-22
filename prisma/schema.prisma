@@ -24,17 +24,6 @@ model User {
   sessions     Session[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  Project      Project[]
-}
-
-model Project {
-  id        String   @id @default(cuid())
-  name      String
-  tasks     Task[]
-  ownerId   String?
-  owner     User?    @relation(fields: [ownerId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Task {
@@ -42,8 +31,6 @@ model Task {
   title       String
   description String
   status      TaskStatus @default(TODO)
-  projectId   String?
-  project     Project?   @relation(fields: [projectId], references: [id])
   userId      String
   user        User       @relation(fields: [userId], references: [id])
   createdAt   DateTime   @default(now())
