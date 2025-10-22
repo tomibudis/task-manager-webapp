@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { listMyTasksAction } from '@/app/actions/taskActions';
 import TaskStatusFilter from './Filter';
+import { LogoutButton } from '@/components/LogoutButton';
 
 function getStatusColor(status: string) {
   switch (status) {
@@ -77,12 +78,15 @@ export default async function TasksPage({
     <div className="mx-auto max-w-2xl p-6 space-y-6">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-3xl font-bold">My Tasks</h1>
-        <Link
-          href="/tasks/new"
-          className="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors"
-        >
-          + New Task
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/tasks/new"
+            className="px-4 py-2 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors"
+          >
+            + New Task
+          </Link>
+          <LogoutButton />
+        </div>
       </div>
       {/* client filter */}
       <div className="border border-border rounded-lg p-4 bg-card">
